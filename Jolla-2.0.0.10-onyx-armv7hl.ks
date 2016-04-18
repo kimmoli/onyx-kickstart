@@ -13,8 +13,8 @@ part / --size 500 --ondisk sda --fstype=ext4
 
 ## No suitable configuration found in /tmp/sandbox/usr/share/ssu/kickstart/bootloader
 
-repo --name=adaptation0-onyx-2.0.0.10 --baseurl=http://repo.merproject.org/obs/nemo:/devel:/hw:/oneplus:/onyx/sailfish_latest_armv7hl/
-repo --name=adaptation1-onyx-2.0.0.10 --baseurl=http://repo.merproject.org/obs/nemo:/devel:/hw:/common/sailfish_latest_armv7hl/
+repo --name=adaptation0-onyx-2.0.0.10 --baseurl=http://repo.merproject.org/obs/nemo:/testing:/hw:/oneplus:/onyx/sailfish_latest_armv7hl/
+repo --name=adaptation1-onyx-2.0.0.10 --baseurl=http://repo.merproject.org/obs/nemo:/testing:/hw:/common/sailfish_latest_armv7hl/
 repo --name=apps-2.0.0.10 --baseurl=https://releases.jolla.com/jolla-apps/2.0.0.10/armv7hl/
 repo --name=hotfixes-2.0.0.10 --baseurl=https://releases.jolla.com/releases/2.0.0.10/hotfixes/armv7hl/
 repo --name=jolla-2.0.0.10 --baseurl=https://releases.jolla.com/releases/2.0.0.10/jolla/armv7hl/
@@ -78,8 +78,8 @@ fi
 ### end 50_oneshot
 ### begin 60_ssu
 ssu dr adaptation0
-ssu ar dhd http://repo.merproject.org/obs/nemo:/devel:/hw:/oneplus:/onyx/sailfish_latest_armv7hl/
-ssu ar mw http://repo.merproject.org/obs/nemo:/devel:/hw:/common/sailfish_latest_armv7hl/
+ssu ar dhd http://repo.merproject.org/obs/nemo:/testing:/hw:/oneplus:/onyx/sailfish_latest_armv7hl/
+ssu ar mw http://repo.merproject.org/obs/nemo:/testing:/hw:/common/sailfish_latest_armv7hl/
 chown -R radio:radio /var/lib/ofono
 if [ "$SSU_RELEASE_TYPE" = "rnd" ]; then
     [ -n "@RNDRELEASE@" ] && ssu release -r @RNDRELEASE@
