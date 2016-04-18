@@ -102,6 +102,7 @@ then
     ssu domain sailfish
 fi
 ### end 70_sdk-domain
+sed -i -e 's|^adaptation=.*$|adaptation=http://repo.merproject.org/obs/nemo:/testing:/hw:/oneplus:/onyx/sailfish_latest_armv7hl/|' /usr/share/ssu/repos.ini
 %end
 
 %post --nochroot
