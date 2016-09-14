@@ -1,23 +1,23 @@
-# DisplayName: Jolla onyx/armv7hl (release) 1
+# DisplayName: Jolla onyx/@ARCH@ (release) 0.0.13
 # KickstartType: release
 # SuggestedImageType: fs
 # SuggestedArchitecture: armv7hl
 
-keyboard us
-user --name nemo --groups audio,video --password nemo
 lang en_US.UTF-8
 timezone --utc UTC
+keyboard us
+user --name nemo --groups audio,video --password nemo
 
 ### Commands from /tmp/sandbox/usr/share/ssu/kickstart/part/default
 part / --size 500 --ondisk sda --fstype=ext4
 
 ## No suitable configuration found in /tmp/sandbox/usr/share/ssu/kickstart/bootloader
 
-repo --name=adaptation0-onyx-2.0.0.10 --baseurl=http://repo.merproject.org/obs/nemo:/testing:/hw:/oneplus:/onyx/sailfish_latest_armv7hl/
-repo --name=adaptation1-onyx-2.0.0.10 --baseurl=http://repo.merproject.org/obs/nemo:/testing:/hw:/common/sailfish_latest_armv7hl/
-repo --name=apps-2.0.0.10 --baseurl=https://releases.jolla.com/jolla-apps/2.0.0.10/armv7hl/
-repo --name=hotfixes-2.0.0.10 --baseurl=https://releases.jolla.com/releases/2.0.0.10/hotfixes/armv7hl/
-repo --name=jolla-2.0.0.10 --baseurl=https://releases.jolla.com/releases/2.0.0.10/jolla/armv7hl/
+repo --name=adaptation0-onyx-@RELEASE@ --baseurl=http://repo.merproject.org/obs/nemo:/testing:/hw:/oneplus:/onyx/sailfish_latest_armv7hl/
+repo --name=adaptation1-@RELEASE@ --baseurl=http://repo.merproject.org/obs/nemo:/testing:/hw:/common/sailfish_latest_armv7hl/
+repo --name=apps-@RELEASE@ --baseurl=https://releases.jolla.com/jolla-apps/@RELEASE@/@ARCH@/
+repo --name=hotfixes-@RELEASE@ --baseurl=https://releases.jolla.com/releases/@RELEASE@/hotfixes/@ARCH@/
+repo --name=jolla-@RELEASE@ --baseurl=https://releases.jolla.com/releases/@RELEASE@/jolla/@ARCH@/
 
 %packages
 @Jolla Configuration onyx
@@ -42,13 +42,13 @@ touch $INSTALL_ROOT/.bootstrap
 %post
 export SSU_RELEASE_TYPE=release
 ### begin 01_arch-hack
-if [ "armv7hl" == armv7hl ] || [ "armv7hl" == armv7tnhl ]; then
+if [ "@ARCH@" == armv7hl ] || [ "@ARCH@" == armv7tnhl ]; then
     # Without this line the rpm does not get the architecture right.
-    echo -n "armv7hl-meego-linux" > /etc/rpm/platform
+    echo -n "@ARCH@-meego-linux" > /etc/rpm/platform
 
     # Also libzypp has problems in autodetecting the architecture so we force tha as well.
     # https://bugs.meego.com/show_bug.cgi?id=11484
-    echo "arch = armv7hl" >> /etc/zypp/zypp.conf
+    echo "arch = @ARCH@" >> /etc/zypp/zypp.conf
 fi
 ### end 01_arch-hack
 ### begin 01_rpm-rebuilddb
@@ -81,15 +81,16 @@ ssu dr adaptation0
 ssu ar dhd http://repo.merproject.org/obs/nemo:/testing:/hw:/oneplus:/onyx/sailfish_latest_armv7hl/
 ssu ar mw http://repo.merproject.org/obs/nemo:/testing:/hw:/common/sailfish_latest_armv7hl/
 chown -R radio:radio /var/lib/ofono
+
 if [ "$SSU_RELEASE_TYPE" = "rnd" ]; then
     [ -n "@RNDRELEASE@" ] && ssu release -r @RNDRELEASE@
     [ -n "@RNDFLAVOUR@" ] && ssu flavour @RNDFLAVOUR@
     # RELEASE is reused in RND setups with parallel release structures
     # this makes sure that an image created from such a structure updates from there
-    [ -n "2.0.0.10" ] && ssu set update-version 2.0.0.10
+    [ -n "@RELEASE@" ] && ssu set update-version @RELEASE@
     ssu mode 2
 else
-    [ -n "2.0.0.10" ] && ssu release 2.0.0.10
+    [ -n "@RELEASE@" ] && ssu release @RELEASE@
     ssu mode 4
 fi
 ### end 60_ssu
